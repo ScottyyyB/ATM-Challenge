@@ -47,6 +47,11 @@ describe Atm do
     expect(subject.withdraw(10, '1234', account)).to eq expected_output
   end
 
+  it 'reject withdraw if amount is not divisible by 5' do
+    expected_ouput = { status: false, message: 'invalid amount', date: Date.today }
+    expect(subject.withdraw(9, '1234', account)).to eq expected_ouput
+  end
+
 
   it 'has 1000$ on initialize' do
     expect(subject.funds).to eq 1000

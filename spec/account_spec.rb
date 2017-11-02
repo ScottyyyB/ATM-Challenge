@@ -2,9 +2,16 @@ require './lib/account.rb'
 require 'Date'
 
 describe Account do
-  subject = described_class.new("Scott Bartels")
-  it 'is expected to have the given name on initialize' do
-    expect(subject.account_owner).to eq "Scott Bartels"
+
+  let(:person) {instance_double('Person', name: 'Thomas')}
+  subject { described_class.new(owner: person) }
+
+  it 'is expected to have an owner' do
+    expect(subject.owner).to eq person
+  end
+
+  it 'is expected to raise error if no owner is set' do
+    expect { described_class.new }.to raise_error 'An Account owner is required'
   end
 
   it 'should be given a 4 digit random pin_code on initialize ranging from 1000 to 9999' do
@@ -12,6 +19,7 @@ describe Account do
     expect(expected_pin_code_length).to eq 4
     expect(subject.pin_code).to be_between(1000,9999)
   end
+
 
   it 'is expected to an expiry date on initialize' do
      expected_date = Date.today.next_year(5).strftime("%m/%y")
@@ -31,6 +39,8 @@ describe Account do
     expect(subject.account_status).to eq :active
   end
 
-
-
+  it 'deactivates account using Instance method' do
+    subject.deactivate
+    expect(subject.account_status).to eq :deactivated
+  end
 end
