@@ -1,4 +1,4 @@
-# require_relative 'atm.rb'
+require './lib/account'
 
 class Person
   attr_reader :name
@@ -47,7 +47,9 @@ class Person
   end
 
   def set_name(name)
-    name.nil? ? error_message('Name') : @name = name
+    # name.nil? ? error_message('Name') : @name = name
+    error_message('Name') if name.nil?
+    @name = name
   end
 
 end
