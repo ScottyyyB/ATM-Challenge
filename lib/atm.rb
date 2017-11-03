@@ -8,9 +8,9 @@ class Atm
 
   def withdraw(amount, pin_code, account)
     case
-    when insufficient_funds_in_account?(amount, account.balance)
+    when insufficient_funds?(amount, account.balance)
       error_message('insufficient funds')
-    when insufficient_funds_in_atm?(amount)
+    when insufficient_funds?(amount, @funds)
       error_message('insufficient funds in ATM')
     when insufficient_pin?(pin_code, account.pin_code)
       error_message('wrong pin')
@@ -39,12 +39,8 @@ class Atm
     pin != actual_pin
   end
 
-  def insufficient_funds_in_account?(amount, account)
-    amount > account
-  end
-
-  def insufficient_funds_in_atm?(amount)
-    @funds < amount
+  def insufficient_funds?(amount, obj)
+    amount > obj
   end
 
   def perform_transaction(amount, account)
