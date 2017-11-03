@@ -15,12 +15,12 @@ class Person
   end
 
   def deposit(amount)
-    error_message('Account') if @account == nil
+    error_message('Account') if @account.nil?
     deposit_funds(amount)
   end
 
   def withdraw(args = {})
-    error_message('ATM') if args[:atm] == nil
+    error_message('ATM') if args[:atm].nil?
     withdraw_funds(args)
   end
 
@@ -46,8 +46,8 @@ class Person
     raise "#{item} is required"
   end
 
-  def set_name(obj)
-    obj.nil? ? error_message('Name') : @name = obj
+  def set_name(name)
+    name.nil? ? error_message('Name') : @name = name
   end
 
 end

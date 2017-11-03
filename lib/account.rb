@@ -13,22 +13,23 @@ class Account
     set_owner(attrs[:owner])
   end
 
-  def set_expire_date
-    Date.today.next_year(STANDARD_VALIDITY_YRS).strftime("%m/%y")
-  end
-
   def deactivate
     @account_status = :deactivated
   end
 
   private
 
+  def set_expire_date
+    Date.today.next_year(STANDARD_VALIDITY_YRS).strftime("%m/%y")
+  end
+
   def generate_pin
     rand(1000..9999)
   end
 
-  def set_owner(obj)
-    obj == nil ? missing_owner : @owner = obj
+  def set_owner(name)
+    missing_owner if name.nil?
+    @owner = name
   end
 
   def missing_owner
