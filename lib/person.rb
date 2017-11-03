@@ -1,8 +1,8 @@
-# require 'account'
+# require_relative 'atm.rb'
 
 class Person
-  attr_reader :cash, :name
-  attr_accessor :account
+  attr_reader :name
+  attr_accessor :account, :cash
 
   def initialize(attrs = {})
     @cash = 0
@@ -15,22 +15,41 @@ class Person
   end
 
   def deposit(amount)
-    @account == nil ? missing_account : @account.balance += amount
+    error_message('Account') if @account == nil
+    deposit_funds(amount)
+  end
+
+  def withdraw(args = {})
+    error_message('ATM') if args[:atm] == nil
+    withdraw_funds(args)
   end
 
   private
 
-  def missing_account
-    raise 'No account present'
+  def withdraw_funds(args)
+    atm = args[:atm]
+    withdraw = atm.withdraw(args[:amount], args[:pin], @account)
+    increase_funds(args) if withdraw[:status]
+    withdraw
+  end
+
+  def increase_funds(cash)
+    @cash += cash[:amount]
+  end
+
+  def deposit_funds(amount)
+    @cash -= amount
+    @account.balance += amount
+  end
+
+  def error_message(item)
+    raise "#{item} is required"
   end
 
   def set_name(obj)
-    obj == nil ? missing_name : @name = obj
+    obj.nil? ? error_message('Name') : @name = obj
   end
 
-  def missing_name
-    raise 'A name is required'
-  end
 end
-me = Person.new(name: 'Scott')
-puts me.name
+# me = Person.new(name: 'Scott')
+# puts me.name

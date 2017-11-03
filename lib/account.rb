@@ -2,12 +2,12 @@ require 'date'
 
 class Account
   STANDARD_VALIDITY_YRS = 5
-  attr_reader :exp_date, :pin_code, :account_status, :owner
-  attr_accessor :balance
+  attr_reader :exp_date, :pin_code
+  attr_accessor :balance, :account_status, :owner
 
   def initialize(attrs = {})
-    @pin_code = set_pin_code
-    @balance = 0
+    @pin_code = generate_pin
+    @balance = attrs[:balance] || 0
     @exp_date = set_expire_date
     @account_status = :active
     set_owner(attrs[:owner])
@@ -17,15 +17,15 @@ class Account
     Date.today.next_year(STANDARD_VALIDITY_YRS).strftime("%m/%y")
   end
 
-  def set_pin_code
-    rand(1000..9999)
-  end
-
   def deactivate
     @account_status = :deactivated
   end
 
   private
+
+  def generate_pin
+    rand(1000..9999)
+  end
 
   def set_owner(obj)
     obj == nil ? missing_owner : @owner = obj
@@ -35,5 +35,5 @@ class Account
     raise "An Account owner is required"
   end
 end
-account = Account.new(owner: 'Scott')
-puts account.owner
+# account = Account.new(owner: 'Scott')
+# puts account.owner

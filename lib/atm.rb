@@ -2,6 +2,7 @@ require_relative 'account.rb'
 
 class Atm
   attr_accessor :funds
+
   def initialize
     @funds = 1000
   end
@@ -50,7 +51,7 @@ class Atm
 
   def perform_transaction(amount, account)
     @funds -= amount
-    account.balance = account.balance - amount
+    account.balance -= amount
     { status: true, message: 'success', date: Date.today, amount: amount, bills: add_bills(amount) }
   end
 
@@ -59,15 +60,13 @@ class Atm
     bills = []
     demoninations.unshift(50) if amount >= 50
 
-    # if amount % 5 == 0
     demoninations.each do |bill|
       while amount - bill >= 0
         amount -= bill
         bills << bill
       end
     end
-     return bills
-  # end
+   return bills
 end
 
   def add_bills_error?(amount)
@@ -75,6 +74,8 @@ end
   end
 
   def account_disabled?(status)
-    status == :disabled
+    status == :deactivated
   end
 end
+
+# puts Atm.new.funds -= 900
